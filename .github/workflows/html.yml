@@ -1,0 +1,20 @@
+name: Jekyll site CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: windows10-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build the site in the html/builder container
+      run: |
+        docker run \
+        -v ${{ github.workspace }}:/srv/html -v ${{ github.workspace }}/_site:/srv/html/_site \
+        html/builder:latest /bin/bash -c "chmod 777 /srv/html && html build --future"
